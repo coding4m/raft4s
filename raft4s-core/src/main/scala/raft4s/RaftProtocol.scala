@@ -16,9 +16,46 @@
 
 package raft4s
 
+import akka.actor.ActorRef
+
 /**
  * @author siuming
  */
 object RaftProtocol {
+  trait Format extends Serializable
 
+  case class VoteRequest(term: Long, candidate: RaftNode, lastTerm: Long, lastIndex: Long)
+  case class VoteResponse(term: Long, granted: Boolean)
+
+  case class AppendRequest(
+    term: Long,
+    entries: Seq[Entry],
+    prevTerm: Long,
+    prevIndex: Long,
+    leaderId: RaftNode,
+    leaderCommit: Long)
+  case class AppendResponse(term: Long, index: Long, retry: Boolean, done: Boolean)
+
+  case class InstallRequest()
+  case class InstallResponse()
+
+  case class Replay(skip: Long, limit: Int, subscriber: Option[ActorRef])
+  case class Read()
+  case class Write()
+
+  case class SaveSnapshot()
+  case class SaveSnapshotSuccess()
+  case class SaveSnapshotFailure()
+
+  case class LoadSnapshot()
+  case class LoadSnapshotSuccess()
+  case class LoadSnapshotFailure()
+
+  case class GetClock()
+  case class GetClockSuccess(clock: WriteAheadClock)
+  case class GetClockFailure(cause: Throwable)
+
+  case class AdjustClock(clock: WriteAheadClock)
+  case class AdjustClockSuccess()
+  case class AdjustClockFailure(cause: Throwable)
 }

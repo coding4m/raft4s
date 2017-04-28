@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package raft4s.log
+package raft4s
+
+import akka.actor.ActorSelection
 
 /**
  * @author siuming
  */
-class RaftLogSPI {
-
-}
+case class RaftLink(node: RaftNode, replicator: ActorSelection)

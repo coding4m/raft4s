@@ -16,7 +16,7 @@ isSnapshot in ThisBuild := true
 
 
 lazy val root = (project in file("."))
-  .aggregate(core)
+  .aggregate(core,kvdb)
   .settings(name := "raft4s")
   .settings(commonSettings: _*)
 //      .settings(protocSettings: _*)
@@ -28,6 +28,17 @@ lazy val root = (project in file("."))
 
 lazy val core = (project in file("raft4s-core"))
   .settings(name := "raft4s-core")
+  .settings(commonSettings: _*)
+  //    .settings(protocSettings: _*)
+  .settings(integrationTestSettings: _*)
+  .settings(libraryDependencies ++= Seq(AkkaCluster, AkkaRemote, CommonsIo, Java8Compat, Scalaz, Protobuf))
+  .settings(libraryDependencies ++= Seq(AkkaTestkit % "test,it", AkkaTestkitMultiNode % "test", Javaslang % "test", JunitInterface % "test", Scalatest % "test,it"))
+  .settings(integrationTestPublishSettings: _*)
+  .configs(IntegrationTest, MultiJvm)
+  .enablePlugins(HeaderPlugin, AutomateHeaderPlugin)
+
+lazy val kvdb = (project in file("raft4s-kvdb"))
+  .settings(name := "raft4s-kvdb")
   .settings(commonSettings: _*)
   //    .settings(protocSettings: _*)
   .settings(integrationTestSettings: _*)

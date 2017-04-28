@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package raft4s.log
+package raft4s
 
 /**
  * @author siuming
  */
-class RaftLog {
-
+case class Snapshot(payload: Any, lastTerm: Long, lastIndex: Long, clock: SnapshotClock) {
+  val metadata: SnapshotMetadata =
+    SnapshotMetadata(lastIndex, lastTerm)
 }
+case class SnapshotMetadata(lastIndex: Long, lastTerm: Long)
